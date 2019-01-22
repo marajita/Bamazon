@@ -47,3 +47,8 @@ VALUE ("Doritos Nacho Cheese Flavored Tortilla Chips", "Groceries", 4.19, 40);
 INSERT INTO products (product_name, department_name, selling_price, stock_quantity)
 VALUE ("Norton Security Premium – 5 Devices", "Software", 25.60, 8);
 
+
+ALTER TABLE products
+ADD product_sales DECIMAL(10,2) NULL;
+
+

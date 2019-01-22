@@ -45,7 +45,6 @@ function displayAllProducts() {
 }
 
 function userInput() {
-  // prompt for info about the item being put up for auction
   inquirer
     .prompt([
       {
@@ -92,11 +91,13 @@ function userInput() {
               ],
               function(error) {
                 if (error) throw err;
+                console.log(" ");
                 console.log("Order placed successfully!");
+                console.log(" ");
 
                 //purchaseSummary();
                 connection.query(
-                  "SELECT selling_price, product_name FROM products WHERE ?",
+                  "SELECT selling_price, product_name, product_sales FROM products WHERE ?",
                   [
                     {
                       item_id: answer.product_id
@@ -108,12 +109,30 @@ function userInput() {
                     var spFromDB = res[0].selling_price;
                     var productNameFromDB = res[0].product_name;
                     var totalPrice = spFromDB * inputQuantity;
-                    console.log("** Your order summary **");
+                    var sales = totalPrice;
+                    console.log("======= Your order summary!! ========");
+                    console.log(" ");
                     console.log("Item : " + productNameFromDB);
                     console.log("Quantity : " + inputQuantity);
                     console.log("Total Price : $" + totalPrice);
-
-                    exitProgram();
+                    console.log("Product Sales Updated : $" + sales);
+                    console.log(" ");
+                    //update product sales
+                    connection.query(
+                      "UPDATE products SET ? WHERE ?",
+                      [
+                        {
+                          product_sales: sales
+                        },
+                        {
+                          item_id: answer.product_id
+                        }
+                      ],
+                      function(err) {
+                        if (err) throw err;
+                        exitProgram();
+                      }
+                    );
                   }
                 );
                 //end
@@ -125,8 +144,8 @@ function userInput() {
     });
 }
 
-//function purchaseSummary() {}
-
 function exitProgram() {
   process.exit(0);
 }
+
+//function purchaseSummary() {}
