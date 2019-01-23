@@ -51,12 +51,24 @@ function userInput() {
         name: "product_id",
         type: "input",
         message:
-          "Please enter the  ID of the product that you would like to buy."
+          "Please enter the  ID of the product that you would like to buy.",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
       },
       {
         name: "quantity",
         type: "input",
-        message: "How many units of the product would you like to buy?."
+        message: "How many units of the product would you like to buy?.",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
       }
     ])
     .then(function(answer) {
@@ -135,7 +147,6 @@ function userInput() {
                     );
                   }
                 );
-                //end
               }
             );
           }

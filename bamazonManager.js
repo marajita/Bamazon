@@ -109,12 +109,24 @@ function addInventory() {
         name: "id",
         type: "input",
         message:
-          "Please enter the  ID of the product that you would like to add."
+          "Please enter the  ID of the product that you would like to add.",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
       },
       {
         name: "quantity",
         type: "input",
-        message: "How much stock quantity you would like to add: "
+        message: "How much stock quantity you would like to add: ",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
       }
     ])
     .then(function(answer) {
@@ -162,22 +174,46 @@ function addNewProduct() {
       {
         name: "product",
         type: "input",
-        message: "What is the product name you would like to add?"
+        message: "What is the product name you would like to add?",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
       },
       {
         name: "department",
         type: "input",
-        message: "Which department you would like to add the product to?"
+        message: "Which department you would like to add the product to?",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
       },
       {
         name: "sp",
         type: "input",
-        message: "What will the selling price of the product?"
+        message: "What will the selling price of the product?",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
       },
       {
         name: "stock",
         type: "input",
-        message: "What is the stock quantity?"
+        message: "What is the stock quantity?",
+        validate: function(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          return false;
+        }
       }
     ])
     .then(function(answer) {
