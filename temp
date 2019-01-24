@@ -1,0 +1,196 @@
+var mysql = require("mysql");
+var inquirer = require("inquirer");
+require("console.table");
+// 1. creating connection
+
+var connection = mysql.createConnection({
+  host: "localhost",
+  port: 8889,
+  user: "root",
+  password: "root",
+  database: "bamazon_db"
+});
+
+connection.connect(function(err) {
+  if (err) throw err;
+  //console.log("connected as id " + connection.threadId);
+  displayAllProducts();
+});
+
+var productSalesFromDB;
+var sales;
+function displayAllProducts() {
+  resultArray = [];
+  connection.query(
+    "SELECT item_id, product_name, selling_price FROM products",
+    function(err, res) {
+      if (err) throw err;
+      res.forEach(function(e) {
+        //console.log(e.item_id + "  " + e.product_name + " " + e.selling_price);
+        itemArray = [];
+        itemArray.push(e.item_id);
+        itemArray.push(e.product_name);
+        itemArray.push("$ " + e.selling_price);
+        resultArray.push(itemArray);
+      });
+      console.log(" ");
+      console.log("=========== ITEMS AVAILABLE FOR SALE =============");
+      console.log(" ");
+      console.table(["Item ID", "Product Name", "Selling Price"], resultArray);
+
+      //connection.end();
+      //idInput();
+      // quantityInput();
+      userInput();
+    }
+  );
+}
+
+function userInput() {
+  inquirer
+    .prompt([
+      {
+        name: "product_id",
+        type: "input",
+        message:
+          "Please enter the  ID of the product that you would like to buy."
+      },
+      {
+        name: "quantity",
+        type: "input",
+        message: "How many units of the product would you like to buy?."
+      }
+    ])
+    .then(function(answer) {
+      // when finished prompting, insert a new item into the db with that info
+      //console.log(answer);
+
+      //user inputs
+      var inputQuantity = answer.quantity;
+      var product_id = answer.product_id;
+
+      //getting product quantity from database by product id
+      var quantityFromDB = getQuantityFromDB(product_id);
+      console.log(quantityFromDB);
+      console.log(inputQuantity);
+      if (inputQuantity > quantityFromDB) {
+        console.log("Insufficient quantity!");
+        exitProgram();
+      } else {
+        console.log("All good so far");
+
+        var updateDB = quantityFromDB - inputQuantity;
+        updateQuantity(product_id, updateDB);
+        purchaseSummary(product_id, inputQuantity);
+        updateProductSales(product_id, productSalesFromDB, sales);
+      }
+
+      // connection.query(
+      //   "SELECT stock_quantity FROM products WHERE ?",
+      //   {
+      //     item_id: answer.product_id
+      //   },
+      //   function(err, res) {
+      //     if (err) throw err;
+      //     //console.log(JSON.stringify(res));
+      //     //console.log(res[0].stock_quantity);
+      //     var quantityFromDB = res[0].stock_quantity;
+      //     if (inputQuantity > quantityFromDB) {
+      //       console.log("Insufficient quantity!");
+      //     } else {
+
+      //     }
+      //   }
+      // );
+    });
+}
+
+function exitProgram() {
+  process.exit(0);
+}
+
+function purchaseSummary(product_id, inputQuantity) {
+  connection.query(
+    "SELECT selling_price, product_name, product_sales FROM products WHERE ?",
+    [
+      {
+        item_id: product_id
+      }
+    ],
+    function(err, res) {
+      if (err) throw err;
+      //console.log(res[0].selling_price);
+      var spFromDB = res[0].selling_price;
+      var productNameFromDB = res[0].product_name;
+      productSalesFromDB = res[0].product_sales;
+      var totalPrice = spFromDB * inputQuantity;
+      sales = totalPrice;
+      console.log("======= Your order summary!! ========");
+      console.log(" ");
+      console.log("Item : " + productNameFromDB);
+      console.log("Quantity : " + inputQuantity);
+      console.log("Total Price : $" + totalPrice);
+      console.log("Product Sales Updated : $" + sales);
+      console.log(" ");
+    }
+  );
+}
+
+function getQuantityFromDB(product_id) {
+  var quantity = null;
+  connection.query(
+    "SELECT stock_quantity FROM products WHERE ?",
+    {
+      item_id: product_id
+    },
+    function(err, res) {
+      if (err) throw err;
+      console.log(JSON.stringify(res));
+      //console.log(res[0].stock_quantity);
+      var quantityFromDB = res[0].stock_quantity;
+      quantity = quantityFromDB;
+      return quantity;
+    }
+  );
+  return quantity;
+}
+
+function updateQuantity(product_id, quantity) {
+  console.log("ahahaha" + quantity);
+  connection.query(
+    "UPDATE products SET ? WHERE ?",
+    [
+      {
+        stock_quantity: quantity
+      },
+      {
+        item_id: product_id
+      }
+    ],
+    function(err) {
+      if (err) throw err;
+      console.log(" ");
+      console.log("Order placed successfully!");
+      console.log(" ");
+    }
+  );
+}
+
+function updateProductSales(product_id, currentSales, newSales) {
+  //update product sales
+  connection.query(
+    "UPDATE products SET ? WHERE ?",
+    [
+      {
+        product_sales: currentSales + productSalesFromDB
+      },
+      {
+        item_id: product_id
+      }
+    ],
+    function(err) {
+      if (err) throw err;
+      exitProgram();
+    }
+  );
+}

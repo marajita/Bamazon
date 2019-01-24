@@ -174,24 +174,12 @@ function addNewProduct() {
       {
         name: "product",
         type: "input",
-        message: "What is the product name you would like to add?",
-        validate: function(value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        }
+        message: "What is the product name you would like to add?"
       },
       {
         name: "department",
         type: "input",
-        message: "Which department you would like to add the product to?",
-        validate: function(value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        }
+        message: "Which department you would like to add the product to?"
       },
       {
         name: "sp",

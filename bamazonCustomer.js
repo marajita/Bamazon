@@ -36,15 +36,12 @@ function displayAllProducts() {
       console.log(" ");
       console.table(["Item ID", "Product Name", "Selling Price"], resultArray);
 
-      //connection.end();
-      //idInput();
-      // quantityInput();
-      userInput();
+      customerRequest();
     }
   );
 }
 
-function userInput() {
+function customerRequest() {
   inquirer
     .prompt([
       {
@@ -120,6 +117,7 @@ function userInput() {
                     //console.log(res[0].selling_price);
                     var spFromDB = res[0].selling_price;
                     var productNameFromDB = res[0].product_name;
+                    var productSalesFromDB = res[0].product_sales;
                     var totalPrice = spFromDB * inputQuantity;
                     var sales = totalPrice;
                     console.log("======= Your order summary!! ========");
@@ -134,7 +132,7 @@ function userInput() {
                       "UPDATE products SET ? WHERE ?",
                       [
                         {
-                          product_sales: sales
+                          product_sales: sales + productSalesFromDB
                         },
                         {
                           item_id: answer.product_id
@@ -158,5 +156,3 @@ function userInput() {
 function exitProgram() {
   process.exit(0);
 }
-
-//function purchaseSummary() {}
