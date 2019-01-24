@@ -33,7 +33,7 @@ The customer can then choose a product using its ID and then enter a quantity to
 If the inventory has enough items, the order will be processed and says: Order placed successfully!
 If the inventory is low, the order will not be processed and it will say: Insufficient quantity!
 
-![GitHub Logo](/images/logo.png)
+![GitHub Logo](/images/customer.gif)
 
 2. BamazonManager.js
 
@@ -50,6 +50,9 @@ The manager can choose option 2 to see low items in inventory (less than 5 in st
 The manager can choose option 3 to re-stock existing items.
 The manager can choose option 4 to add new items for sale. 
 
+![GitHub Logo](/images/Manager.gif)
+![GitHub Logo](/images/ManagerDBUpdate.gif)
+
 
 3. BamazonSupervisor.js 
 
@@ -65,3 +68,5 @@ The supervisor can choose option 2 to add a new department.
 Notice how the department list was adjusted from step 2. 
 Also note that the manager can add a new item to the department and if a customer buys said item, it will cause total sales and profit to increase in that department.
 
+![GitHub Logo](/images/Supervisor.gif)
+![GitHub Logo](/images/SupervisorUpdate.gif)
