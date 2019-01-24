@@ -51,6 +51,8 @@ The manager can choose option 3 to re-stock existing items.
 The manager can choose option 4 to add new items for sale. 
 
 ![GitHub Logo](/images/Manager.gif)
+
+
 ![GitHub Logo](/images/ManagerDBUpdate.gif)
 
 
@@ -69,4 +71,6 @@ Notice how the department list was adjusted from step 2.
 Also note that the manager can add a new item to the department and if a customer buys said item, it will cause total sales and profit to increase in that department.
 
 ![GitHub Logo](/images/Supervisor.gif)
+
+
 ![GitHub Logo](/images/SupervisorUpdate.gif)
