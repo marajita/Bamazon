@@ -51,7 +51,7 @@ function productSalesByDept() {
         itemArray.push(e.department_name);
         itemArray.push("$ " + e.over_head_cost);
         itemArray.push(e.total_sales);
-        //var productSales = itemArray.push(e.total_sales - e.over_head_cost);
+        itemArray.push(e.over_head_cost - e.total_sales);
         resultArray.push(itemArray);
       });
 
